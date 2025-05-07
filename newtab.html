@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Tab</title>
+    <!-- Critical CSS moved to external file to comply with CSP -->
+    <link rel="stylesheet" href="css/critical.css" />
+    <!-- Preload CSS files -->
+    <link rel="preload" href="css/styles.css" as="style" />
+    <!-- Load CSS files -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- Preload fonts -->
+    <link
+      rel="preload"
+      href="fonts/SF-Pro-Display-Ultralight.otf"
+      as="font"
+      type="font/otf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/SF-Pro-Display-Light.otf"
+      as="font"
+      type="font/otf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/SF-Pro-Display-Regular.otf"
+      as="font"
+      type="font/otf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/SF-Pro-Text-Regular.otf"
+      as="font"
+      type="font/otf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/SF-Pro-Text-Medium.otf"
+      as="font"
+      type="font/otf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/SF-Pro-Text-Semibold.otf"
+      as="font"
+      type="font/otf"
+      crossorigin
+    />
+  </head>
+  <body>
+    <!-- Loading overlay - simple full screen fade that adapts to theme -->
+    <div id="loading-overlay" class="loading-overlay"></div>
+
+    <!-- Background gradient overlay -->
+    <div class="background-gradient"></div>
+
+    <!-- Subtle noise texture overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Bookmarks sidebar trigger area -->
+    <div id="sidebar-trigger" class="sidebar-trigger"></div>
+
+    <!-- Bookmarks sidebar (hidden by default) -->
+    <div id="bookmarks-sidebar" class="bookmarks-sidebar">
+      <div class="bookmarks-header">
+        <div class="bookmarks-header-top">
+          <h2>Quick Access</h2>
+          <button
+            id="sidebar-close"
+            class="sidebar-close"
+            aria-label="Close sidebar"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 6L6 18"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M6 6L18 18"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="bookmark-tabs">
+          <button class="bookmark-tab active" data-tab="bookmarks">
+            Bookmarks
+          </button>
+          <button class="bookmark-tab" data-tab="topvisited">
+            Top Visited
+          </button>
+        </div>
+      </div>
+      <div class="bookmarks-content">
+        <div id="bookmarks-tab" class="bookmark-tab-content active">
+          <div id="bookmarks-list" class="bookmarks-list"></div>
+        </div>
+        <div id="topvisited-tab" class="bookmark-tab-content">
+          <div id="topvisited-list" class="bookmarks-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings button -->
+    <button id="settings-toggle" class="settings-toggle" aria-label="Settings">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7842 4.34276 14.532 4.07447 14.3543C3.80618 14.1766 3.49179 14.0813 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29577 4.55324 9.54802 4.34276 9.72569 4.07447C9.90337 3.80618 9.99872 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15Z"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    <!-- Main container -->
+    <div class="container">
+      <!-- Time module -->
+      <div class="time-module">
+        <div id="clock" class="clock">
+          <div id="clock-container" style="min-width: 7em; text-align: right">
+            <!-- Will be populated by JavaScript with animated digits -->
+          </div>
+          <span id="seconds" class="clock-seconds"></span>
+          <span id="period" class="clock-period"></span>
+        </div>
+        <div id="date" class="date">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Search module -->
+      <div class="search-module">
+        <div id="greeting" class="greeting">
+          <!-- Will be populated by JavaScript -->
+        </div>
+        <form id="search-form" class="search-form">
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search..."
+              autocomplete="off"
+              autofocus
+              title="Press / to focus, Alt+S to change search engine"
+            />
+            <div
+              class="search-engine-indicator"
+              id="search-engine-indicator"
+            ></div>
+          </div>
+          <div class="search-engines" id="search-engines">
+            <button
+              type="button"
+              class="search-engine-option"
+              data-engine="google"
+            >
+              <img src="icons/google.svg" alt="Google" />
+              <span>Google</span>
+            </button>
+            <button
+              type="button"
+              class="search-engine-option"
+              data-engine="bing"
+            >
+              <img src="icons/bing.svg" alt="Bing" />
+              <span>Bing</span>
+            </button>
+            <button
+              type="button"
+              class="search-engine-option"
+              data-engine="duckduckgo"
+            >
+              <img src="icons/duckduckgo.svg" alt="DuckDuckGo" />
+              <span>DuckDuckGo</span>
+            </button>
+            <button
+              type="button"
+              class="search-engine-option"
+              data-engine="yahoo"
+            >
+              <img src="icons/yahoo.svg" alt="Yahoo" />
+              <span>Yahoo</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Quick links section has been removed -->
+
+      <!-- Quote module (hidden by default) -->
+      <div class="quote-module" id="quote-module">
+        <p id="quote" class="quote">
+          <!-- Will be populated by JavaScript -->
+        </p>
+      </div>
+    </div>
+
+    <!-- Settings panel (hidden by default) -->
+    <div id="settings-panel" class="settings-panel">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button
+          id="close-settings"
+          class="close-settings"
+          aria-label="Close settings"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M6 6L18 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Settings Tabs Navigation -->
+      <div class="settings-tabs">
+        <button class="settings-tab active" data-tab="appearance">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 8V12"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 16H12.01"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Appearance</span>
+        </button>
+        <button class="settings-tab" data-tab="clock">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <polyline
+              points="12 6 12 12 16 14"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Clock</span>
+        </button>
+        <button class="settings-tab" data-tab="search">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <line
+              x1="21"
+              y1="21"
+              x2="16.65"
+              y2="16.65"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Search</span>
+        </button>
+
+        <button class="settings-tab" data-tab="smart">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 16V8.00002C20.9996 7.6493 20.9071 7.30483 20.7315 7.00119C20.556 6.69754 20.3037 6.44539 20 6.27002L13 2.27002C12.696 2.09449 12.3511 2.00208 12 2.00208C11.6489 2.00208 11.304 2.09449 11 2.27002L4 6.27002C3.69626 6.44539 3.44398 6.69754 3.26846 7.00119C3.09294 7.30483 3.00036 7.6493 3 8.00002V16C3.00036 16.3508 3.09294 16.6952 3.26846 16.9989C3.44398 17.3025 3.69626 17.5547 4 17.73L11 21.73C11.304 21.9056 11.6489 21.998 12 21.998C12.3511 21.998 12.696 21.9056 13 21.73L20 17.73C20.3037 17.5547 20.556 17.3025 20.7315 16.9989C20.9071 16.6952 20.9996 16.3508 21 16Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M3.27002 6.96002L12 12.01L20.73 6.96002"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 22.08V12"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Smart Features</span>
+        </button>
+
+        <button class="settings-tab" data-tab="help">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9 22H15"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 17V22"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 13.5C14.21 13.5 16 11.71 16 9.5V2L12 6L8 2V9.5C8 11.71 9.79 13.5 12 13.5Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Help</span>
+        </button>
+
+        <button class="settings-tab" data-tab="about">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 8V12"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 16H12.01"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>About</span>
+        </button>
+      </div>
+
+      <div class="settings-content">
+        <!-- Appearance Tab Content -->
+        <div id="appearance-tab" class="settings-tab-content active">
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Color Themes</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="theme-selector">
+              <div class="theme-options">
+                <!-- Classic Theme -->
+                <div class="theme-option" data-theme="classic">
+                  <div class="theme-preview">
+                    <div
+                      class="theme-preview-header"
+                      style="
+                        background-color: #121212;
+                        color: rgba(255, 255, 255, 0.7);
+                      "
+                    >
+                      <div
+                        class="theme-preview-accent"
+                        style="background-color: #5c6bc0"
+                      ></div>
+                      <div class="theme-preview-ui">
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                      </div>
+                    </div>
+                    <div
+                      class="theme-preview-body"
+                      style="background-color: #1a1a1a"
+                    >
+                      <div class="theme-preview-text"></div>
+                      <div class="theme-preview-text"></div>
+                    </div>
+                  </div>
+                  <div class="theme-name">Classic Dark</div>
+                </div>
+
+                <!-- Midnight Theme -->
+                <div class="theme-option" data-theme="midnight">
+                  <div class="theme-preview">
+                    <div
+                      class="theme-preview-header"
+                      style="
+                        background-color: #0f172a;
+                        color: rgba(255, 255, 255, 0.7);
+                      "
+                    >
+                      <div
+                        class="theme-preview-accent"
+                        style="background-color: #38bdf8"
+                      ></div>
+                      <div class="theme-preview-ui">
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                      </div>
+                    </div>
+                    <div
+                      class="theme-preview-body"
+                      style="background-color: #1e293b"
+                    >
+                      <div class="theme-preview-text"></div>
+                      <div class="theme-preview-text"></div>
+                    </div>
+                  </div>
+                  <div class="theme-name">Midnight Blue</div>
+                </div>
+
+                <!-- Forest Theme -->
+                <div class="theme-option" data-theme="forest">
+                  <div class="theme-preview">
+                    <div
+                      class="theme-preview-header"
+                      style="
+                        background-color: #0f1922;
+                        color: rgba(255, 255, 255, 0.7);
+                      "
+                    >
+                      <div
+                        class="theme-preview-accent"
+                        style="background-color: #10b981"
+                      ></div>
+                      <div class="theme-preview-ui">
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                      </div>
+                    </div>
+                    <div
+                      class="theme-preview-body"
+                      style="background-color: #1a2e32"
+                    >
+                      <div class="theme-preview-text"></div>
+                      <div class="theme-preview-text"></div>
+                    </div>
+                  </div>
+                  <div class="theme-name">Forest</div>
+                </div>
+
+                <!-- Nord Theme -->
+                <div class="theme-option" data-theme="nord">
+                  <div class="theme-preview">
+                    <div
+                      class="theme-preview-header"
+                      style="
+                        background-color: #2e3440;
+                        color: rgba(236, 239, 244, 0.7);
+                      "
+                    >
+                      <div
+                        class="theme-preview-accent"
+                        style="background-color: #88c0d0"
+                      ></div>
+                      <div class="theme-preview-ui">
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                      </div>
+                    </div>
+                    <div
+                      class="theme-preview-body"
+                      style="background-color: #3b4252"
+                    >
+                      <div class="theme-preview-text"></div>
+                      <div class="theme-preview-text"></div>
+                    </div>
+                  </div>
+                  <div class="theme-name">Nord</div>
+                </div>
+
+                <!-- Claude Theme -->
+                <div class="theme-option" data-theme="claude">
+                  <div class="theme-preview">
+                    <div
+                      class="theme-preview-header"
+                      style="
+                        background-color: #1f1e1d;
+                        color: rgba(255, 255, 255, 0.7);
+                      "
+                    >
+                      <div
+                        class="theme-preview-accent"
+                        style="background-color: #e97451"
+                      ></div>
+                      <div class="theme-preview-ui">
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                      </div>
+                    </div>
+                    <div
+                      class="theme-preview-body"
+                      style="background-color: #262624"
+                    >
+                      <div class="theme-preview-text"></div>
+                      <div class="theme-preview-text"></div>
+                    </div>
+                  </div>
+                  <div class="theme-name">Claude</div>
+                </div>
+
+                <!-- Dynamic Theme -->
+                <div class="theme-option" data-theme="dynamic">
+                  <div class="theme-preview">
+                    <div
+                      class="theme-preview-header dynamic-dark-preview-header"
+                    >
+                      <div
+                        class="theme-preview-accent"
+                        style="background-color: #8b5cf6"
+                      ></div>
+                      <div class="theme-preview-ui">
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                        <div class="theme-preview-ui-dot"></div>
+                      </div>
+                    </div>
+                    <div class="theme-preview-body dynamic-dark-preview-body">
+                      <div class="theme-preview-text"></div>
+                      <div class="theme-preview-text"></div>
+                    </div>
+                  </div>
+                  <div class="theme-name">Dynamic</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Accent Color</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-item accent-color-setting">
+              <label>Theme Accent Colors</label>
+              <div class="accent-colors-grid" id="theme-accent-colors">
+                <!-- Accent colors will be populated dynamically -->
+                <div class="custom-color-wrapper">
+                  <div class="custom-color-button">
+                    <div class="color-spectrum-ring"></div>
+                    <div class="color-spectrum-inner"></div>
+                    <div class="color-picker-icon">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"
+                          fill="white"
+                        />
+                      </svg>
+                    </div>
+                    <input type="color" id="accent-color" value="#5C6BC0" />
+                  </div>
+                  <span>Custom</span>
+                </div>
+              </div>
+              <div class="setting-description">
+                Select from theme-specific accent colors or choose a custom
+                color to personalize your new tab page.
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Content</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-item">
+              <label for="show-quote">Show Quote</label>
+              <label class="toggle">
+                <input type="checkbox" id="show-quote" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <label for="time-based-background">Time-Based Background</label>
+              <label class="toggle">
+                <input type="checkbox" id="time-based-background" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Subtle background variations that change based on time of day
+            </div>
+
+            <div class="setting-item">
+              <label for="time-based-pattern">Time-Based Pattern</label>
+              <label class="toggle">
+                <input type="checkbox" id="time-based-pattern" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Change background pattern based on time of day
+            </div>
+
+            <div class="setting-item">
+              <label for="background-pattern">Background Pattern</label>
+            </div>
+            <div class="setting-item">
+              <select id="background-pattern">
+                <option value="none">None</option>
+                <optgroup label="Basic Patterns">
+                  <option value="dots">Dots</option>
+                  <option value="grid">Grid</option>
+                  <option value="waves">Waves</option>
+                  <option value="diagonal">Diagonal</option>
+                  <option value="triangles">Triangles</option>
+                </optgroup>
+                <optgroup label="Geometric Patterns">
+                  <option value="honeycomb">Honeycomb</option>
+                  <option value="chevron">Chevron</option>
+                  <option value="polkadots">Polka Dots</option>
+                </optgroup>
+                <optgroup label="Technical Patterns">
+                  <option value="circuit">Circuit</option>
+                  <option value="topographic">Topographic</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="setting-description">
+              Add a subtle pattern to the background
+            </div>
+
+            <div class="setting-item">
+              <label for="pattern-opacity">Pattern Opacity</label>
+              <input
+                type="range"
+                id="pattern-opacity"
+                min="0.1"
+                max="1"
+                step="0.1"
+                value="0.5"
+                class="slider"
+              />
+              <span id="pattern-opacity-value" class="slider-value">50%</span>
+            </div>
+            <div class="setting-description">
+              Adjust the visibility of the background pattern
+            </div>
+
+            <div class="setting-item">
+              <label for="pattern-size">Pattern Size</label>
+              <input
+                type="range"
+                id="pattern-size"
+                min="0.01"
+                max="2.0"
+                step="0.01"
+                value="1.0"
+                class="slider"
+              />
+              <span id="pattern-size-value" class="slider-value">100%</span>
+            </div>
+            <div class="setting-description">
+              Adjust the size of the background pattern
+            </div>
+
+            <div class="setting-item">
+              <label for="pattern-rotation">Pattern Rotation</label>
+              <input
+                type="range"
+                id="pattern-rotation"
+                min="0"
+                max="359"
+                step="1"
+                value="0"
+                class="slider"
+              />
+              <span id="pattern-rotation-value" class="slider-value">0°</span>
+            </div>
+            <div class="setting-description">Rotate the background pattern</div>
+
+            <div class="setting-item">
+              <label for="pattern-density">Pattern Density</label>
+              <input
+                type="range"
+                id="pattern-density"
+                min="0.1"
+                max="5.0"
+                step="0.01"
+                value="1.0"
+                class="slider"
+              />
+              <span id="pattern-density-value" class="slider-value">100%</span>
+            </div>
+            <div class="setting-description">
+              Adjust the spacing between pattern elements
+            </div>
+
+            <div class="setting-item">
+              <label for="pattern-animation">Pattern Animation</label>
+              <label class="toggle">
+                <input type="checkbox" id="pattern-animation" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Enable subtle animation for the background pattern
+            </div>
+
+            <div
+              class="setting-item pattern-animation-type-container"
+              style="display: none"
+            >
+              <label for="pattern-animation-type">Animation Type</label>
+              <select id="pattern-animation-type">
+                <option value="pulse">Pulse</option>
+                <option value="rotate">Rotate</option>
+                <option value="float">Float</option>
+              </select>
+            </div>
+            <div
+              class="setting-description pattern-animation-type-container"
+              style="display: none"
+            >
+              Select the type of animation for the pattern
+            </div>
+
+            <!-- Pattern position, edge fade, and fade amount controls have been removed -->
+          </div>
+        </div>
+
+        <!-- Clock Tab Content -->
+        <div id="clock-tab" class="settings-tab-content">
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Time Format</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-item">
+              <label for="clock-format">Clock Format</label>
+              <select id="clock-format">
+                <option value="24h">24-hour</option>
+                <option value="12h">12-hour</option>
+              </select>
+            </div>
+            <div class="setting-description">
+              Choose between 12-hour (AM/PM) or 24-hour time format
+            </div>
+
+            <div class="setting-item">
+              <label for="show-seconds">Show Seconds</label>
+              <label class="toggle">
+                <input type="checkbox" id="show-seconds" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">Display seconds in the clock</div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Animation</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-item">
+              <label for="clock-animation">Digit Animation</label>
+              <select id="clock-animation">
+                <option value="none">None</option>
+                <option value="fade">Fade</option>
+                <option value="slide">Slide</option>
+                <option value="flip">Flip</option>
+                <option value="bounce">Bounce</option>
+              </select>
+            </div>
+            <div class="setting-description">
+              Choose how digits animate when the time changes
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Tab Content -->
+        <div id="search-tab" class="settings-tab-content">
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Search Engine</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-item full-width-label">
+              <label for="default-search-engine">Default Search Engine</label>
+            </div>
+            <div class="setting-item full-width-control">
+              <select id="default-search-engine" class="full-width">
+                <option value="google">Google</option>
+                <option value="bing">Bing</option>
+                <option value="duckduckgo">DuckDuckGo</option>
+                <option value="yahoo">Yahoo</option>
+              </select>
+            </div>
+            <div class="setting-description">
+              Select which search engine to use for searches
+            </div>
+          </div>
+        </div>
+
+        <!-- Smart Features Tab Content -->
+        <div id="smart-tab" class="settings-tab-content">
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Smart Features</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-item">
+              <label for="smart-features-enabled">Enable Smart Features</label>
+              <label class="toggle">
+                <input type="checkbox" id="smart-features-enabled" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Enable intelligent features that adapt to your usage patterns
+            </div>
+
+            <div class="setting-item">
+              <label for="user-name">Your Name</label>
+              <input
+                type="text"
+                id="user-name"
+                class="text-input"
+                placeholder="Enter your name"
+                maxlength="20"
+              />
+            </div>
+            <div class="setting-description">
+              Add your name for personalized greetings
+            </div>
+
+            <div class="setting-item">
+              <label for="context-aware-greetings"
+                >Context-Aware Greetings</label
+              >
+              <label class="toggle">
+                <input type="checkbox" id="context-aware-greetings" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Show personalized greetings based on your behavior and preferences
+            </div>
+
+            <div class="setting-item full-width-label">
+              <label for="greeting-animation">Greeting Animation</label>
+            </div>
+            <div class="setting-item full-width-control">
+              <select id="greeting-animation" class="full-width">
+                <option value="none">None</option>
+                <option value="fade">Fade</option>
+                <option value="slide">Slide</option>
+                <option value="bounce">Bounce</option>
+              </select>
+            </div>
+            <div class="setting-description">
+              Choose animation style for greeting changes
+            </div>
+
+            <div class="setting-item">
+              <label for="smart-background-patterns"
+                >Smart Background Patterns</label
+              >
+              <label class="toggle">
+                <input type="checkbox" id="smart-background-patterns" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Automatically change background patterns based on your activity
+            </div>
+
+            <div class="setting-item full-width-label">
+              <label for="greeting-tone">Greeting Tone</label>
+            </div>
+            <div class="setting-item full-width-control">
+              <select id="greeting-tone" class="full-width">
+                <option value="friendly">Friendly</option>
+                <option value="professional">Professional</option>
+                <option value="motivational">Motivational</option>
+                <option value="casual">Casual</option>
+              </select>
+            </div>
+            <div class="setting-description">
+              Choose your preferred tone for greetings
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Privacy</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-description">
+              Smart features collect usage data to personalize your experience.
+              All data is stored locally in your browser and is never sent to
+              any server.
+            </div>
+
+            <div class="setting-item">
+              <label for="track-visits">Track Visit Patterns</label>
+              <label class="toggle">
+                <input type="checkbox" id="track-visits" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Track when and how often you visit to personalize greetings
+            </div>
+
+            <div class="setting-item">
+              <label for="track-searches">Track Search Patterns</label>
+              <label class="toggle">
+                <input type="checkbox" id="track-searches" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Analyze search queries to understand your interests
+            </div>
+
+            <div class="setting-item">
+              <label for="track-bookmarks">Track Bookmark Usage</label>
+              <label class="toggle">
+                <input type="checkbox" id="track-bookmarks" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Monitor bookmark clicks to learn your preferences
+            </div>
+
+            <div class="setting-item">
+              <label for="track-productivity">Track Productivity</label>
+              <label class="toggle">
+                <input type="checkbox" id="track-productivity" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-description">
+              Analyze usage patterns to determine productivity levels
+            </div>
+
+            <div class="setting-item full-width-label">
+              <label for="data-retention">Data Retention Period (days)</label>
+            </div>
+            <div class="setting-item full-width-control">
+              <input
+                type="range"
+                id="data-retention"
+                min="7"
+                max="90"
+                step="1"
+                class="slider full-width"
+              />
+              <div class="slider-value" id="data-retention-value">30</div>
+            </div>
+            <div class="setting-description">
+              How long to keep your usage data before automatic deletion
+            </div>
+
+            <div class="setting-item">
+              <button id="reset-user-data" class="btn btn-secondary">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                  ></path>
+                  <path d="M3 3v5h5"></path>
+                  <path
+                    d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"
+                  ></path>
+                  <path d="M16 21h5v-5"></path>
+                </svg>
+                Reset User Data
+              </button>
+            </div>
+            <div class="setting-description">
+              Clear all collected usage data and start fresh
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Tab Content -->
+        <div id="help-tab" class="settings-tab-content">
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Keyboard Shortcuts</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="setting-description">
+              Quick keyboard commands to improve your workflow
+            </div>
+            <div class="keyboard-shortcuts">
+              <div class="shortcut-item">
+                <span class="shortcut-key">/</span>
+                <span class="shortcut-description">Focus search</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Alt+S</span>
+                <span class="shortcut-description">Change search engine</span>
+              </div>
+              <div class="shortcut-item">
+                <span class="shortcut-key">Esc</span>
+                <span class="shortcut-description"
+                  >Close dropdowns / Blur search</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- About Tab Content -->
+        <div id="about-tab" class="settings-tab-content">
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Extension Information</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="about-content">
+              <div class="about-header">
+                <div class="about-logo">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      width="24"
+                      height="24"
+                      rx="12"
+                      fill="var(--accent-color)"
+                      fill-opacity="0.2"
+                    />
+                    <path
+                      d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                      stroke="var(--accent-color)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M12 18V18.01"
+                      stroke="var(--accent-color)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M12 14C11.9816 13.6037 12.1345 13.2179 12.4223 12.9322C12.7101 12.6465 13.1151 12.4878 13.5396 12.4931C13.9641 12.4983 14.3649 12.6671 14.6453 12.9604C14.9257 13.2537 15.0684 13.6437 15.04 14.04C15.04 15 13.04 15.5 13.04 15.5"
+                      stroke="var(--accent-color)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M8 10C8 7.79086 9.79086 6 12 6C14.2091 6 16 7.79086 16 10"
+                      stroke="var(--accent-color)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="about-title">
+                  <h2>Noir</h2>
+                  <p class="about-version">Version 1.0.0</p>
+                  <p class="about-date">Released: May 7, 2025</p>
+                </div>
+              </div>
+              <p class="about-description">
+                A minimal, elegant new tab experience with smart features and
+                beautiful themes.
+              </p>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Developer</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="about-developer">
+              <div class="developer-info">
+                <div class="developer-avatar">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      width="24"
+                      height="24"
+                      rx="12"
+                      fill="var(--accent-color)"
+                      fill-opacity="0.2"
+                    />
+                    <path
+                      d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+                      stroke="var(--accent-color)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z"
+                      stroke="var(--accent-color)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="developer-details">
+                  <h4>mosadd1X</h4>
+                  <p>Creator & Developer</p>
+                  <a
+                    href="https://github.com/mosadd1X"
+                    class="support-link"
+                    target="_blank"
+                    aria-label="Visit mosadd1X's GitHub profile"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9 19C4.7 20.4 4.7 16.5 3 16M15 21V17.5C15 16.5 15.1 16.1 14.5 15.5C17.3 15.2 20 14.1 20 9.49995C19.9988 8.30492 19.5325 7.15726 18.7 6.29995C19.0905 5.26192 19.0545 4.11158 18.6 3.09995C18.6 3.09995 17.5 2.79995 15.1 4.39995C13.0672 3.87054 10.9328 3.87054 8.9 4.39995C6.5 2.79995 5.4 3.09995 5.4 3.09995C4.94548 4.11158 4.90953 5.26192 5.3 6.29995C4.46745 7.15726 4.00122 8.30492 4 9.49995C4 14.1 6.7 15.2 9.5 15.5C8.9 16.1 8.9 16.7 9 17.5V21"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    GitHub Profile
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Version History</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="about-version-history">
+              <div class="version-item">
+                <div class="version-header">
+                  <span class="version-number">1.0.0</span>
+                  <span class="version-date">May 7, 2025</span>
+                </div>
+                <ul class="version-changes">
+                  <li>Initial release</li>
+                  <li>Added dark themes with accent colors</li>
+                  <li>Implemented smart features and background patterns</li>
+                  <li>Added customizable clock with animations</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Privacy Policy</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="about-privacy">
+              <p>
+                Noir respects your privacy. All data is stored locally on your
+                device and is never transmitted to external servers.
+              </p>
+              <div class="privacy-details">
+                <h4>Data Storage</h4>
+                <p>
+                  Your preferences and settings are stored in your browser's
+                  local storage.
+                </p>
+                <h4>Data Retention</h4>
+                <p>
+                  You can clear all stored data by clearing your browser's cache
+                  or using the data aging feature in Smart Features.
+                </p>
+                <h4>Permissions</h4>
+                <p>
+                  This extension only requests the minimum permissions needed to
+                  function as a new tab page.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>Acknowledgments</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="about-acknowledgments">
+              <p>SF Pro fonts by Apple Inc.</p>
+              <p>Icons from Feather Icons</p>
+              <p>
+                Design inspiration from
+                <a
+                  href="https://claude.ai/"
+                  class="support-link"
+                  target="_blank"
+                  aria-label="Visit Claude.ai"
+                  >Claude.ai</a
+                >
+              </p>
+              <p>Special thanks to all beta testers</p>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="section-header">
+              <h3>License & Support</h3>
+              <div class="section-divider"></div>
+            </div>
+            <div class="about-license-support">
+              <p>Noir is released under the MIT License.</p>
+              <div class="support-links">
+                <a
+                  href="https://github.com/mosadd1X/noir/issues"
+                  class="support-link"
+                  target="_blank"
+                  aria-label="Report an issue on GitHub"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M12 8V12"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M12 16H12.01"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Report an Issue
+                </a>
+                <a
+                  href="mailto:mosaddiqx@gmail.com"
+                  class="support-link"
+                  aria-label="Send feedback via email"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M22 6L12 13L2 6"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Send Feedback
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/settings.js"></script>
+    <script src="js/smart-features.js"></script>
+    <script src="js/loader.js"></script>
+    <script src="js/newtab.js"></script>
+  </body>
+</html>

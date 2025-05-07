@@ -1,0 +1,6 @@
+<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+  <!-- Topographic pattern -->
+  <path d="M5,5 C10,0 30,0 35,5 C40,10 40,30 35,35 C30,40 10,40 5,35 C0,30 0,10 5,5 Z" stroke="currentColor" fill="none" stroke-width="0.5" opacity="0.1"/>
+  <path d="M10,10 C15,5 25,5 30,10 C35,15 35,25 30,30 C25,35 15,35 10,30 C5,25 5,15 10,10 Z" stroke="currentColor" fill="none" stroke-width="0.5" opacity="0.1"/>
+  <path d="M15,15 C18,12 22,12 25,15 C28,18 28,22 25,25 C22,28 18,28 15,25 C12,22 12,18 15,15 Z" stroke="currentColor" fill="none" stroke-width="0.5" opacity="0.1"/>
+</svg>

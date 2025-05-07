@@ -1,0 +1,75 @@
+/* Critical CSS for immediate rendering */
+html,
+body {
+  background-color: #121212; /* Default dark background */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  opacity: 1; /* Start visible to prevent white screen */
+  transition: background-color 0.1s ease-out, color 0.1s ease-out; /* Faster transition */
+}
+
+.preload * {
+  animation-duration: 0s !important;
+  transition: background-color 0s, color 0s, opacity 0s, transform 0s !important;
+}
+
+.background-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  z-index: -2;
+  display: block;
+  transition: background 0.1s ease-out, opacity 0.1s ease-out; /* Faster transition */
+  will-change: background, opacity;
+}
+
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+  z-index: -1;
+  display: block;
+  transition: background-color 0.1s ease-out, opacity 0.1s ease-out,
+    mix-blend-mode 0.1s ease-out; /* Faster transition */
+  will-change: background-color, opacity, mix-blend-mode;
+}
+
+/* Make container visible initially */
+.container {
+  opacity: 1; /* Start visible to prevent white screen */
+}
+
+/* Loading overlay - theme-matched overlay that stays until everything loads */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color, #121212); /* Uses theme background color */
+  background-image: linear-gradient(
+    135deg,
+    var(--bg-gradient-start, #121212),
+    var(--bg-gradient-end, #1a1a1a)
+  );
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.4s ease-out; /* Smooth fade */
+  will-change: opacity;
+  /* Allow it to be hidden when needed */
+  display: block;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
